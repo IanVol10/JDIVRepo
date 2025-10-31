@@ -1,0 +1,94 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.login-container {
+  text-align: center;
+}
+
+.login-container h1 {
+  color: #ff4d00;
+  margin-bottom: 20px;
+  font-size: 2em;
+}
+
+
+.login-box {
+  background-color: #1a1a1a;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  width: 350px;
+}
+
+.login-box h2 {
+  color: #fff;
+  margin-bottom: 25px;
+}
+
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 5px;
+  outline: none;
+  background-color: #fff;
+}
+
+
+.btn-login {
+  background-color: #ff4d00;
+  color: #fff;
+  border: none;
+  padding: 10px 0;
+  border-radius: 25px;
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  background-color: #e04300;
+  box-shadow: 0 0 10px #ff4d00;
+  transform: scale(1.05);
+}
+
+.volver {
+  display: inline-block;
+  margin-top: 20px;
+  color: #ff4d00;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.volver:hover {
+  color: #fff;
+}
