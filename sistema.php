@@ -2,17 +2,10 @@
 session_start();
 include('conexion.php');
 
-
 if (!isset($_SESSION['venta'])) $_SESSION['venta'] = [];
-
-
 $seccion = $_GET['seccion'] ?? 'ventas';
 
-
-
 if ($seccion === 'ventas') {
-
-  
     $busqueda = $_GET['buscar'] ?? '';
     $sql = "SELECT codigo, nombre, precio, cantidad AS stock FROM objeto";
     if ($busqueda != '') {
@@ -22,16 +15,13 @@ if ($seccion === 'ventas') {
     $resultado = $conn->query($sql);
     $productos = $resultado ? $resultado->fetch_all(MYSQLI_ASSOC) : [];
 
-    
     if (isset($_POST['codigo'])) {
         $codigo = $_POST['codigo'];
         $buscar = $conn->query("SELECT * FROM objeto WHERE codigo='$codigo' LIMIT 1");
         if ($buscar && $buscar->num_rows > 0) {
             $producto = $buscar->fetch_assoc();
             if ($producto['cantidad'] > 0) {
-                
                 $conn->query("UPDATE objeto SET cantidad = cantidad - 1 WHERE codigo='$codigo'");
-                
                 $_SESSION['venta'][] = [
                     "codigo" => $producto['codigo'],
                     "nombre" => $producto['nombre'],
@@ -41,32 +31,22 @@ if ($seccion === 'ventas') {
         }
     }
 
-    
     if (isset($_POST['confirmar'])) {
         $total = array_sum(array_column($_SESSION['venta'], 'precio'));
         $fecha = date("Y-m-d H:i:s");
-
-        
         $conn->query("INSERT INTO pedido (fecha, total) VALUES ('$fecha', '$total')");
         $id_pedido = $conn->insert_id;
-
-        
         foreach ($_SESSION['venta'] as $item) {
             $codigo = $item['codigo'];
             $precio = $item['precio'];
             $conn->query("INSERT INTO pedido_detalle (id_pedido, codigo_producto, precio) VALUES ($id_pedido, '$codigo', $precio)");
         }
-
-        $_SESSION['venta'] = []; 
+        $_SESSION['venta'] = [];
     }
-
     $total = array_sum(array_column($_SESSION['venta'], 'precio'));
 }
 
-
-
 if ($seccion === 'stock') {
-    
     if (isset($_POST['nuevo'])) {
         $codigo = $_POST['codigo'];
         $nombre = $_POST['nombre'];
@@ -74,8 +54,6 @@ if ($seccion === 'stock') {
         $stock = $_POST['stock'];
         $conn->query("INSERT INTO objeto (codigo, nombre, precio, cantidad) VALUES ('$codigo', '$nombre', $precio, $stock)");
     }
-
-    
     if (isset($_POST['editar'])) {
         $codigo = $_POST['codigo'];
         $nombre = $_POST['nombre'];
@@ -83,17 +61,12 @@ if ($seccion === 'stock') {
         $stock = $_POST['stock'];
         $conn->query("UPDATE objeto SET nombre='$nombre', precio=$precio, cantidad=$stock WHERE codigo='$codigo'");
     }
-
-    
     if (isset($_POST['eliminar'])) {
         $codigo = $_POST['codigo'];
         $conn->query("DELETE FROM objeto WHERE codigo='$codigo'");
     }
-
-    
     $productos_stock = $conn->query("SELECT * FROM objeto")->fetch_all(MYSQLI_ASSOC);
 }
-
 
 if ($seccion === 'pedidos') {
     $pedidos = $conn->query("
@@ -105,7 +78,6 @@ if ($seccion === 'pedidos') {
     ")->fetch_all(MYSQLI_ASSOC);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -117,6 +89,7 @@ nav {
   background: #111;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 30px;
   padding: 15px;
 }
@@ -129,44 +102,31 @@ nav a {
 nav a:hover, nav a.activo {
   text-decoration: underline;
 }
+.cerrar {
+  margin-left: auto;
+  background: #ff5500;
+  color: #fff !important;
+  padding: 8px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.cerrar:hover {
+  background: #e04300;
+}
 </style>
 </head>
 <body>
-
 <header>
   <h1>Control de Stock y Ventas</h1>
   <nav>
     <a href="?seccion=ventas" class="<?= $seccion=='ventas'?'activo':'' ?>">Ventas</a>
     <a href="?seccion=stock" class="<?= $seccion=='stock'?'activo':'' ?>">Stock</a>
     <a href="?seccion=pedidos" class="<?= $seccion=='pedidos'?'activo':'' ?>">Pedidos</a>
-    <a href="Pagina Inicial.php" class="<?= $seccion=='logout'?'activo':'' ?>">logout</a>
+    <a href="logout.php" class="cerrar">Cerrar sesión</a>
   </nav>
 </header>
-
 <main class="contenedor">
-
-
-  
-
-<?php
-
- if ($seccion === 'logout'): 
-
-include('logout.php');
-
-endif
-
-?>
-
-
-
-
-
- 
-
-
 <?php if ($seccion === 'ventas'): ?>
-  
   <div class="panel-izquierda">
     <section class="busqueda">
       <form method="get">
@@ -200,7 +160,6 @@ endif
       </table>
     </div>
   </div>
-
   <div class="panel-derecha">
     <h2>Venta en curso</h2>
     <?php if (empty($_SESSION['venta'])): ?>
@@ -216,9 +175,7 @@ endif
       <form method="post"><button type="submit" name="confirmar">Confirmar venta</button></form>
     <?php endif; ?>
   </div>
-
 <?php elseif ($seccion === 'stock'): ?>
- 
   <div class="panel-izquierda" style="flex:1;">
     <h2>Gestión de Stock</h2>
     <div style="text-align:right; margin-bottom:20px;">
@@ -232,12 +189,6 @@ endif
         + Agregar nuevo objeto
         </a>
     </div>
-
-
-
-
-
-
     <table>
       <tr><th>Código</th><th>Nombre</th><th>Precio</th><th>Cantidad</th><th>Acciones</th></tr>
       <?php foreach ($productos_stock as $p): ?>
@@ -256,9 +207,7 @@ endif
       <?php endforeach; ?>
     </table>
   </div>
-
 <?php elseif ($seccion === 'pedidos'): ?>
-  
   <div class="panel-izquierda" style="flex:1;">
     <h2>Pedidos Realizados</h2>
     <table>
@@ -274,9 +223,7 @@ endif
     </table>
   </div>
 <?php endif; ?>
-
 </main>
-
 <footer>
   <p>© 2025 MotoBox Repuestos</p>
 </footer>

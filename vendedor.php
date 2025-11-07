@@ -5,13 +5,10 @@ include('conexion.php');
 
 
 
-//if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'vendedor') {
-//    header("Location: Pagina Inicial.php");
-//   exit();
-//}
 
 
-//$id_usuario = $_SESSION['id_usuario'];
+
+
 
 
 if (!isset($_SESSION['venta'])) $_SESSION['venta'] = [];

@@ -2,8 +2,6 @@
 session_start();
 include('conexion.php');
 
-
-
 $pedidos = $conn->query("
     SELECT p.id_pedido, p.fecha, p.total, COUNT(d.id_pedido_detalle) AS productos
     FROM pedido p
@@ -23,6 +21,7 @@ nav {
   background: #111;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 30px;
   padding: 15px;
 }
@@ -32,12 +31,37 @@ nav a {
   font-weight: bold;
   font-size: 1.1rem;
 }
+.cerrar {
+  margin-left: auto;
+  background: #ff5500;
+  color: #fff !important;
+  padding: 8px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.cerrar:hover {
+  background: #e04300;
+}
+.inicio {
+  background: #ff5500;
+  color: #fff !important;
+  padding: 8px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.inicio:hover {
+  background: #e04300;
+}
 </style>
 </head>
 <body>
 
 <header>
   <h1>Pedidos del Cliente</h1>
+  <nav>
+    <a href="Pagina Inicial.php" class="inicio">Ir a Inicio</a>
+    <a href="logout.php" class="cerrar">Cerrar sesión</a>
+  </nav>
 </header>
 
 <main class="contenedor">
